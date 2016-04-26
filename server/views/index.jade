@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to auth2 server
+
+  if !user
+    p <a href="/login">Sign in &rarr;</a>
+
