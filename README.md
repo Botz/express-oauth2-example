@@ -7,12 +7,14 @@ learning purpose repository
 start the oauth2 server  (listens on :3000) 
 ```bash
 cd ./server
+npm install
 npm start
 ```
 
 start the oauth2 client (listens on :8080)
 ```bash
 cd ./client
+npm install
 npm start
 ```
 
