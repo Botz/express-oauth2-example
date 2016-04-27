@@ -18,9 +18,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(morgan('dev'));
 
 app.oauth = oauthserver({
-  model: model, 
-  grants: ['password', 'authorization_code', 'refresh_token'],
-  debug: true
+    model: model,
+    grants: ['password', 'authorization_code', 'refresh_token'],
+    debug: true
 });
 
 var ensureAuthenticated = function(req, res, next) {
@@ -30,8 +30,8 @@ var ensureAuthenticated = function(req, res, next) {
     res.redirect('/login');
 };
  
-app.all('/oauth/token', app.oauth.grant());
-app.get('/oauth/authorise', function(req, res, next) {
+app.all('/o/oauth2/token', app.oauth.grant());
+app.get('/o/oauth2/auth', function(req, res, next) {
     if (!req.session.user) {
         return res.redirect('/login?redirect=' + encodeURIComponent(req.path + '?client_id=' + req.query.client_id + '&redirect_uri=' + req.query.redirect_uri));
     }
@@ -42,7 +42,7 @@ app.get('/oauth/authorise', function(req, res, next) {
 });
 
 // Handle authorise
-app.post('/oauth/authorise',
+app.post('/o/oauth2/auth',
     function(req, res, next) {
         console.log('authorize', req.session);
         if (!req.session.user) {

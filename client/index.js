@@ -5,7 +5,7 @@ var morgan              = require('morgan');
 var bodyParser          = require('body-parser');
 var cookieParser        = require('cookie-parser');
 var cookieSession       = require('cookie-session');
-var OAuth2Strategy      = require('passport-oauth').OAuth2Strategy;
+var Strategy           = require('./passport-myserver-oauth2').Strategy;
 var app                 = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -34,34 +34,14 @@ var ensureAuthenticated = function(req, res, next) {
   res.redirect('/login');
 };
 
-
-// this should go into an own provider strategy like passport-jep-oauth2
-OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
-    this._oauth2.get('http://localhost:3000/account.json', accessToken, function (err, body, res) {
-        if (err) { return done(new InternalOAuthError('failed to fetch user profile', err)); }
-        try {
-            var json = JSON.parse(body);
-            var profile = json;
-            done(null, profile);
-        } catch(e) {
-            done(e);
-        };
-    });
-
-};
-
 passport.use(
-    'provider', 
-    new OAuth2Strategy({
-        authorizationURL: 'http://localhost:3000/oauth/authorise',
-        tokenURL: 'http://localhost:3000/oauth/token',
+    new Strategy({
         clientID: '123-456-789',
         clientSecret: 'shhh-its-a-secret',
         callbackURL: 'http://localhost:8080/login/oauth/callback'
     },
     function(accessToken, refreshToken, profile, done) {
         console.log(arguments);
-        // populate to own db?
         done(null, profile);
     })
 );
@@ -71,9 +51,9 @@ app.get('/', function(req, res) {
         user: req.session.user
     });
 });
-app.get('/login', passport.authenticate('provider'));
+app.get('/login', passport.authenticate('myserver'));
 app.get('/login/oauth/callback',
-    passport.authenticate('provider', { 
+    passport.authenticate('myserver', { 
         successRedirect: '/admin',
         failureRedirect: '/'
     })
