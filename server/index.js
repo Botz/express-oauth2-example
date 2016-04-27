@@ -9,7 +9,7 @@ var model         = require('./model');
 var app           = express();
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 app.use(cookieParser('ncie0fnft6wjfmgtjz8i'));
 app.use(cookieSession({name: 'session', keys: ['abc']}));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -35,6 +35,7 @@ app.get('/o/oauth2/auth', function(req, res, next) {
     if (!req.session.user) {
         return res.redirect('/login?redirect=' + encodeURIComponent(req.path + '?client_id=' + req.query.client_id + '&redirect_uri=' + req.query.redirect_uri));
     }
+    console.log(req.query);
     res.render('authorise', {
         client_id: req.query.client_id,
         redirect_uri: req.query.redirect_uri

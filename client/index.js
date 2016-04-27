@@ -5,11 +5,11 @@ var morgan              = require('morgan');
 var bodyParser          = require('body-parser');
 var cookieParser        = require('cookie-parser');
 var cookieSession       = require('cookie-session');
-var Strategy           = require('./passport-myserver-oauth2').Strategy;
+var Strategy            = require('./passport-myserver-oauth2').Strategy;
 var app                 = express();
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 app.use(cookieParser('aoghasdgalsadf213'));
 app.use(cookieSession({name: 'client-session', keys: ['abc']}));
 app.use(bodyParser.urlencoded({ extended: true}));
